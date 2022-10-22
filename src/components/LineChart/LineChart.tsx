@@ -14,10 +14,12 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
     setWidth(360);
     setHeight(360);
 
+    // drawLineHandler();
+
     // remove g element tags
     remove();
 
-    // drawLineHandler(items);
+    // 
     const svg = d3.select(lineChart.current)
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -27,7 +29,7 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
     // x axis scale
     const xScale = d3.scaleBand()
       .domain(d3.range(items.length) as unknown as string[])
-      .range([margin.left, width - margin.right])
+      .range([margin.left, width + margin.right])
       .padding(1);
 
     svg.append('g')
@@ -54,6 +56,7 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
       .attr('d', d3.line<ChartType>()
         .x((d, i) => xScale(i as unknown as string) as number)
         .y((d) => yScale(d.count))
+        // .curve(d3.curveCardinal)
       );
 
     // Add title 

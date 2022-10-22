@@ -1,73 +1,71 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChartType } from "../../types/index";
-// import * as d3 from 'd3';
+import * as d3 from 'd3';
 import './BarChart.css';
 
 const BarChart = ({ items }: { items: ChartType[] }) => {
+  const [width, setWidth] = useState(360);
+  const [height, setHeight] = useState(360);
+  // const margin = { top: 30, right: 30, bottom: 30, left: 30 }
   const barChart = useRef<SVGSVGElement>(null);
-  // Define dimensions
-  // const width = 360;
-  // const height = 360;
-  // const margin = { top: 50, right: 30, bottom: 30, left: 60 }
+  
   useEffect(() => {
+    const margin = { top: 30, right: 30, bottom: 30, left: 30 }
+    setWidth(360);
+    setHeight(360);
 
-    drawBarHandler(items);
+    // drawBarHandler(items);
 
-  }, [items]);
+    // remove g element tags
+    remove();
 
-  const drawBarHandler = (items: ChartType[]) => {
-    
-  }
-  // const drawLineHandler = (items: ChartType[]) => {
-  //   const chartwidth = parseInt(d3.select('#lineContainer').style('width')) - margin.left - margin.right
-  //   const chartheight = parseInt(d3.select('#lineContainer').style('height')) - margin.top - margin.bottom
+    // 
+    const svg = d3.select(barChart.current)
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
 
+    // x axis scale
+    const xScale = d3.scaleBand()
+      .domain(d3.range(items.length) as unknown as string[])
+      .range([margin.left, width + margin.right])
+      .padding(0.1)
 
-  //   const svg = d3.select(barChart.current)
-  //     .attr('width', width + margin.left + margin.right)
-  //     .attr('height', height + margin.top + margin.bottom)
+    svg.append('g')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(d3.axisBottom(xScale).tickFormat((d, i) => items[i].label).tickSizeOuter(0))
 
-  //   // x scale
-  //   const xScale = d3.scaleBand()
-  //     .domain(d3.range(items.length) as unknown as string[])
-  //     // .domain([`0, ${width}`])
-  //     .range([margin.left, chartwidth - margin.right])
-  //     .padding(0.1)
+    const max = d3.max(items, function (d) { return d.count })
 
-  //   svg.append('g')
-  //     .attr('transform', 'translate(0,' + chartheight + ')')
-  //     .call(d3.axisBottom(xScale).tickFormat((d, i) => items[i].label).tickSizeOuter(0))
+    // y axis scale
+    const yScale = d3.scaleLinear()
+      .domain([0, max] as number[])
+      .range([height, margin.top])
 
-  //   const max = d3.max(items, function (d) { return d.count })
+    svg.append('g')
+      .attr('transform', 'translate(' + margin.left + ',0)')
+      .call(d3.axisLeft(yScale))
 
-  //   // y scale
-  //   const yScale = d3.scaleLinear()
-  //     .domain([0, max] as number[])
-  //     .range([chartheight, margin.top])
+    // Draw bars
+    svg.append('g')
+      .attr('fill', '#000000')
+      .selectAll('rect')
+      .data(items)
+      .join('rect')
+      .attr('x', (d, i) => xScale(i as unknown as string) as number)
+      .attr('y', d => yScale(d.count))
+      .attr('height', d => yScale(0) - yScale(d.count))
+      .attr('width', xScale.bandwidth())
 
-  //   svg.append('g')
-  //     .attr('transform', 'translate(' + margin.left + ',0)')
-  //     .call(d3.axisLeft(yScale))
+  }, [items, width, height]);
 
-  //   // Draw bars
-  //   svg.append('g')
-  //     .attr('fill', '#65f0eb')
-  //     .selectAll('rect')
-  //     .data(items)
-  //     .join('rect')
-  //     // .attr('x', (d, i) => xScale(i))
-  //     .attr('x', (d, i): number => xScale('5') as number)
-  //     // .attr('x', (d, i): number => xScale(i as unknown as string) as number)
-  //     .attr('y', d => yScale(d.count))
-  //     // .attr("d", d3.line()
-  //     //   .x(function(d) { return x(d.date) })
-  //     //   .y(function(d) { return y(d.value) })
-  //     //   .x((d) => { return x(d.label); })
-  //     //   .y((d) => { return y(d.count); })
-  //     // )
-  //     .attr('height', d => yScale(0) - yScale(d.count))
-  //     .attr('width', xScale.bandwidth())
-  // }
+  const remove = () => {
+    const g = d3.select(barChart.current).selectAll('g');
+
+    // check the number of existing elements, if greater than 0; remove all existing ones
+    if (g.size()) {
+      g.remove().exit();
+    }
+  };
 
   return (
     <div className="bar">

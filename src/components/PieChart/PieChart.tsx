@@ -9,9 +9,21 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
   const pieChart = useRef<SVGSVGElement>(null);
   useEffect(() => {
 
+    // remove g element tags
+    remove();
+
     drawPieHandler(items);
 
   }, [items]);
+
+  const remove = () => {
+    const g = d3.select(pieChart.current).selectAll('g');
+    const pieContainer = d3.select('#pieContainer').selectAll('#visibility');
+    if(pieContainer.size()) pieContainer.remove().exit();
+
+    // check the number of existing elements, if greater than 0; remove all existing ones
+    if (g.size()) g.remove().exit();
+  };
 
   const drawPieHandler = (items: ChartType[]) => {
     // Define dimensions
@@ -36,6 +48,7 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
     // Add tooltip
     const tooldiv = d3.select('#pieContainer')
       .append('div')
+      .attr('id', 'visibility')
       .style('visibility', 'hidden')
       .style('position', 'absolute')
       .style('background-color', 'red')
