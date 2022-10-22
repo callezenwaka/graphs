@@ -8,7 +8,7 @@ const BarChart = ({ items }: { items: ChartType[] }) => {
   const [height, setHeight] = useState(360);
   // const margin = { top: 30, right: 30, bottom: 30, left: 30 }
   const barChart = useRef<SVGSVGElement>(null);
-  
+
   useEffect(() => {
     const margin = { top: 30, right: 30, bottom: 30, left: 30 }
     setWidth(360);
@@ -34,7 +34,7 @@ const BarChart = ({ items }: { items: ChartType[] }) => {
       .attr('transform', 'translate(0,' + height + ')')
       .call(d3.axisBottom(xScale).tickFormat((d, i) => items[i].label).tickSizeOuter(0))
 
-    const max = d3.max(items, function (d) { return d.count })
+    const max = d3.max(items, function (d) { return d.value })
 
     // y axis scale
     const yScale = d3.scaleLinear()
@@ -52,8 +52,8 @@ const BarChart = ({ items }: { items: ChartType[] }) => {
       .data(items)
       .join('rect')
       .attr('x', (d, i) => xScale(i as unknown as string) as number)
-      .attr('y', d => yScale(d.count))
-      .attr('height', d => yScale(0) - yScale(d.count))
+      .attr('y', d => yScale(d.value))
+      .attr('height', d => yScale(0) - yScale(d.value))
       .attr('width', xScale.bandwidth())
 
   }, [items, width, height]);

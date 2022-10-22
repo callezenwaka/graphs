@@ -31,7 +31,7 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
     const height = 360;
     const radius = Math.min(width, height) / 2;
     // Get positions for each data object
-    const piedata = d3.pie<ChartType>().value(d => d.count)(items)
+    const piedata = d3.pie<ChartType>().value(d => d.value)(items)
     // Define arcs for graphing 
     const arc = d3.arc<PieArcDatum<ChartType>>().innerRadius(0).outerRadius(radius)
     // Define colors for graphing 
@@ -65,7 +65,7 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
       .attr('stroke', 'white')
       .on('mouseover', (e, d) => {
         tooldiv.style('visibility', 'visible')
-          .text(`${d.data.label}: ${d.data.count}`)
+          .text(`${d.data.label}: ${d.data.value}`)
       })
       .on('mousemove', (e, d) => {
         tooldiv.style('top', (e.pageY - 50) + 'px')

@@ -1,6 +1,6 @@
 interface Chart {
   label: string,
-  count: number,
+  value: number,
 }
 
 export default Chart;

@@ -3,17 +3,18 @@ import { Header, BarChart, LineChart, PieChart } from "./components/index";
 import './App.css';
 
 const data = [
-  {label: 'A', count: 590},
-  {label: 'B', count: 300},
-  {label: 'C', count: 350},
-  {label: 'D', count: 150},
-  {label: 'E', count: 50},
+  {label: 'A', value: 590},
+  {label: 'B', value: 300},
+  {label: 'C', value: 350},
+  {label: 'D', value: 150},
+  {label: 'E', value: 50},
 ]
 
 function App() {
 
   return (
     <div className="App">
+      {/* <img src={logo} className="App-logo" alt="logo" /> */}
       <section>
         <Header />
       </section>
@@ -22,7 +23,6 @@ function App() {
         <LineChart items={ data } />
         <BarChart items={ data } />
       </section>
-      {/* <img src={logo} className="App-logo" alt="logo" /> */}
     </div>
   );
 }

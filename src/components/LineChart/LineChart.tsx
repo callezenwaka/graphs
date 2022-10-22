@@ -36,7 +36,7 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
       .attr('transform', 'translate(0,' + height + ')')
       .call(d3.axisBottom(xScale).tickFormat((d, i) => items[i].label).tickSizeOuter(0))
 
-    const max = d3.max(items, (d) => d.count);
+    const max = d3.max(items, (d) => d.value);
 
     // y axis scale
     const yScale = d3.scaleLinear()
@@ -55,7 +55,7 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
       .attr('stroke-width', 1.5)
       .attr('d', d3.line<ChartType>()
         .x((d, i) => xScale(i as unknown as string) as number)
-        .y((d) => yScale(d.count))
+        .y((d) => yScale(d.value))
         // .curve(d3.curveCardinal)
       );
 
