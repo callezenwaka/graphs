@@ -1,15 +1,14 @@
+import { ChartType } from '../../types';
 import BarChart from './BarChart';
-// import { Header, Subscription } from "../partials";
+import './BarChart.css';
 
-const BlogContainer = () => {
+const BarContainer = ({ items }: { items: ChartType[] }) => {
 
   return (
-    <div className='flex flex-row flex-wrap justify-between content-center gap-5 md:gap-0 px-2.5 py-5 bg-slate-100'>
-      {/* <Header /> */}
-      <BarChart />
-      {/* <Subscription /> */}
+    <div className='bar--wrapper'>
+      <BarChart items={ items } />
     </div>      
   );
 };
 
-export default BlogContainer;
+export default BarContainer;

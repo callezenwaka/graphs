@@ -1,15 +1,14 @@
+import { ChartType } from '../../types';
 import LineChart from './LineChart';
-// import { Header, Subscription } from "../partials";
+import './LineChart.css';
 
-const BlogContainer = () => {
+const LineContainer = ({ items }: { items: ChartType[] }) => {
 
   return (
-    <div className='flex flex-row flex-wrap justify-between content-center gap-5 md:gap-0 px-2.5 py-5 bg-slate-100'>
-      {/* <Header /> */}
-      <LineChart />
-      {/* <Subscription /> */}
+    <div className='line--wrapper'>
+      <LineChart items={ items } />
     </div>      
   );
 };
 
-export default BlogContainer;
+export default LineContainer;

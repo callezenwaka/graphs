@@ -1,49 +1,40 @@
-// import { useEffect, useState } from "react";
-// import { ChartType } from "../../types/index";
-// import Chart from "../../types/Chart";
+import { useEffect, useRef } from "react";
+import { ChartType } from "../../types/index";
 import * as d3 from 'd3';
 import { PieArcDatum } from 'd3-shape'
 import './PieChart.css';
-import { useEffect, useRef } from "react";
 
-interface Chart {
-  label: string,
-  count: number,
-}
-
-const PieChart = ({ items }: { items: Chart[] }) => {
+const PieChart = ({ items }: { items: ChartType[] }) => {
   // const pieChart = useRef<HTMLDivElement>(null);
   const pieChart = useRef<SVGSVGElement>(null);
   useEffect(() => {
+
+    drawPieHandler(items);
+
+  }, [items]);
+
+  const drawPieHandler = (items: ChartType[]) => {
+    // Define dimensions
     const width = 360;
     const height = 360;
     const radius = Math.min(width, height) / 2;
     // Get positions for each data object
-    const piedata = d3.pie<Chart>().value(d => d.count)(items)
+    const piedata = d3.pie<ChartType>().value(d => d.count)(items)
     // Define arcs for graphing 
-    const arc = d3.arc<PieArcDatum<Chart>>().innerRadius(0).outerRadius(radius)
-
+    const arc = d3.arc<PieArcDatum<ChartType>>().innerRadius(0).outerRadius(radius)
+    // Define colors for graphing 
     const colors = d3.scaleOrdinal(['#ffa822', '#134e6f', '#ff6150', '#1ac0c6', '#dee0e6'])
+    // const colors = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Define the size and position of svg
-    // var svg = d3.select('#chart')
-    // const svg = d3.select(pieChart.current)
-    // .append('svg')
-    // .attr('width', width)
-    // .attr('height', height)
-    // .append('g')
-    // .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
     const svg = d3.select(pieChart.current)
-    // .append('svg')
       .attr('width', width)
       .attr('height', height)
-      // .style('background-color','yellow')
       .append('g')
-      // .attr('transform', 'translate(300,300)')
       .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
 
     // Add tooltip
-    const tooldiv = d3.select('#chartArea')
+    const tooldiv = d3.select('#pieContainer')
       .append('div')
       .style('visibility', 'hidden')
       .style('position', 'absolute')
@@ -55,7 +46,6 @@ const PieChart = ({ items }: { items: Chart[] }) => {
       .data(piedata)
       .join('path')
       .attr('d', arc)
-      // .attr('fill', (d, i) => colors(i as unknown as string))
       .attr('fill', (d) => {
         return colors(d.data.label) as string
       })
@@ -71,14 +61,16 @@ const PieChart = ({ items }: { items: Chart[] }) => {
       .on('mouseout', () => {
         tooldiv.style('visibility', 'hidden')
       })
-
-  }, [items]);
+  }
 
   return (
     <div className="pie">
       <section className="pie--section">
-        <div id='chartArea'>
-          <svg ref={pieChart}></svg>
+        <div id='pieContainer' className="pie--container">
+          <h1 className="pie--title">Pie Chart</h1>
+          <div className="pie--content">
+            <svg ref={pieChart}></svg>
+          </div>
         </div>
       </section>
     </div>
