@@ -8,6 +8,7 @@ const data = [
   {label: 'C', value: 350},
   {label: 'D', value: 150},
   {label: 'E', value: 50},
+  {label: 'F', value: 250},
 ]
 
 function App() {

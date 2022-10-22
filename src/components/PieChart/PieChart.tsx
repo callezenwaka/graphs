@@ -7,6 +7,7 @@ import './PieChart.css';
 const PieChart = ({ items }: { items: ChartType[] }) => {
   // const pieChart = useRef<HTMLDivElement>(null);
   const pieChart = useRef<SVGSVGElement>(null);
+
   useEffect(() => {
 
     // remove g element tags
@@ -31,12 +32,16 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
     const height = 360;
     const radius = Math.min(width, height) / 2;
     // Get positions for each data object
-    const piedata = d3.pie<ChartType>().value(d => d.value)(items)
+    const piedata = d3.pie<ChartType>().value(d => d.value)(items);
     // Define arcs for graphing 
     const arc = d3.arc<PieArcDatum<ChartType>>().innerRadius(0).outerRadius(radius)
     // Define colors for graphing 
     const colors = d3.scaleOrdinal(['#ffa822', '#134e6f', '#ff6150', '#1ac0c6', '#dee0e6'])
-    // const colors = d3.scaleOrdinal(d3.schemeCategory10);
+    // const colors = d3.scaleOrdinal()
+    //   .domain(d3.range(items.length) as unknown as string[])
+    //   .range( d3.quantize((t) => d3.interpolateGreens(t * 0.8 + 0.1), items.length)
+    //     .reverse() 
+    //   );
 
     // Define the size and position of svg
     const svg = d3.select(pieChart.current)
