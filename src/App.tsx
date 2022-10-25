@@ -19,7 +19,7 @@ function App() {
       <section>
         <Header />
       </section>
-      <section>
+      <section className="app--section">
         <PieChart items={ data } />
         <LineChart items={ data } />
         <BarChart items={ data } />

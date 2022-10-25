@@ -1,0 +1,6 @@
+.bar--section {
+  margin-top: 3rem;
+}
+.bar--wrapper {
+  width: calc(100% / 3);
+}

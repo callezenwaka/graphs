@@ -19,7 +19,7 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
     // remove g element tags
     remove();
 
-    // 
+    // set svg component
     const svg = d3.select(lineChart.current)
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -60,13 +60,13 @@ const LineChart = ({ items }: { items: ChartType[] }) => {
       );
 
     // Add title 
-    svg.append('text')
-      .attr('x', (width / 2))
-      .attr('y', (margin.top / 5 - 10))
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '16px')
-      .attr('fill', 'black')
-      .text('Test data');
+    // svg.append('text')
+    //   .attr('x', (width / 2))
+    //   .attr('y', (margin.top / 5 - 10))
+    //   .attr('text-anchor', 'middle')
+    //   .attr('font-size', '16px')
+    //   .attr('fill', 'black')
+    //   .text('Test data');
 
   }, [items, width, height]);
 

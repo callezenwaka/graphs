@@ -56,6 +56,15 @@ const BarChart = ({ items }: { items: ChartType[] }) => {
       .attr('height', d => yScale(0) - yScale(d.value))
       .attr('width', xScale.bandwidth())
 
+    // Add title 
+    // svg.append('text')
+    //   .attr('x', (width / 2))
+    //   .attr('y', (margin.top / 5 - 10))
+    //   .attr('text-anchor', 'middle')
+    //   .attr('font-size', '16px')
+    //   .attr('fill', 'black')
+    //   .text('Test data');
+
   }, [items, width, height]);
 
   const remove = () => {

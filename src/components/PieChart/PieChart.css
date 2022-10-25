@@ -1,3 +1,6 @@
 .pie--section {
   margin-top: 3rem;
 }
+.pie--wrapper {
+  width: calc(100% / 3);
+}

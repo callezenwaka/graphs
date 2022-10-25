@@ -30,6 +30,7 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
     // Define dimensions
     const width = 360;
     const height = 360;
+    const margin = { top: 30, right: 30, bottom: 30, left: 30 }
     const radius = Math.min(width, height) / 2;
     // Get positions for each data object
     const piedata = d3.pie<ChartType>().value(d => d.value)(items);
@@ -39,6 +40,7 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
     const colors = d3.scaleOrdinal(['#ffa822', '#134e6f', '#ff6150', '#1ac0c6', '#dee0e6'])
     // const colors = d3.scaleOrdinal()
     //   .domain(d3.range(items.length) as unknown as string[])
+      // .range([(items) => items.label]);
     //   .range( d3.quantize((t) => d3.interpolateGreens(t * 0.8 + 0.1), items.length)
     //     .reverse() 
     //   );
@@ -79,6 +81,16 @@ const PieChart = ({ items }: { items: ChartType[] }) => {
       .on('mouseout', () => {
         tooldiv.style('visibility', 'hidden')
       })
+
+    // Add title
+    // const title = d3.select('#pieContainer')
+    // title.append('text')
+    //   .attr('x', (width / 2))
+    //   .attr('y', (margin.top / 5 - 10))
+    //   .attr('text-anchor', 'middle')
+    //   .attr('font-size', '16px')
+    //   .attr('fill', 'black')
+    //   .text('Test data');
   }
 
   return (
