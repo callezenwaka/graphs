@@ -1,0 +1,11 @@
+.line--section {
+  margin-top: 3rem;
+}
+.line--wrapper {
+  width: 100%;
+}
+@media only screen and (min-width: 960px) {
+  .line--wrapper {
+    width: calc(100% / 3);
+  }
+}

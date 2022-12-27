@@ -1,0 +1,11 @@
+.pie--section {
+  margin-top: 3rem;
+}
+.pie--wrapper {
+  width: 100%;
+}
+@media only screen and (min-width: 960px) {
+  .pie--wrapper {
+    width: calc(100% / 3);
+  }
+}
