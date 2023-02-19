@@ -6,7 +6,6 @@
 // @ is an alias to /src
 import type Revenue from "@/types/Revenue";
 import * as d3 from "d3";
-// import { useStore } from "vuex";
 import {
   onMounted,
   onBeforeUnmount,
@@ -24,7 +23,6 @@ interface Input {
 // set the dimensions and margins of the graph
 // https://d3-graph-gallery.com/graph/line_basic.html
 const lineChartRef = ref<HTMLElement | null>(null);
-// const widthOffSet = ref<number>(lineChartRef?.value?.offsetWidth || 0);
 const margin = reactive({ top: 30, right: 20, bottom: 30, left: 40 });
 const height = ref<number>(360);
 const width = ref<number>(
@@ -83,7 +81,7 @@ const data = computed((): Revenue[] => {
 
 onMounted(async () => {
   window.addEventListener("resize", handleResize);
-  // handleResize();
+  handleResize();
   handleDraw();
 });
 
@@ -110,7 +108,6 @@ const remove = () => {
 
 const handleResize = () => {
   if (lineChartRef?.value?.offsetWidth) {
-    console.log(lineChartRef?.value?.offsetWidth);
     width.value = lineChartRef?.value?.offsetWidth - margin.left - margin.right;
     return;
   }
@@ -132,8 +129,6 @@ const handleDraw = async () => {
     .attr("height", height.value + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-  // const data: User[] = await handleData();
 
   // Add X axis --> it is a date format
   const x = d3
