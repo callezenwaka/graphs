@@ -31,26 +31,25 @@ const DoughnutChart = ({ items }: { items: ChartType[] }) => {
     // Define dimensions
     const width = 360;
     const height = 360;
-    const margin = { top: 30, right: 30, bottom: 30, left: 30 }
-    const radius = Math.min(width, height) / 2;
     const innerRadius = 100; // inner radius of pie, in pixels (non-zero for donut)
     const outerRadius = Math.min(width, height) / 2; // outer radius of pie, in pixels
+
     // Get positions for each data object
     const piedata = d3.pie<ChartType>().value(d => d.value)(items);
-    const pieGenerator = d3.pie<ChartType>().value(d => d.value)(items);
-    // Define arcs for graphing 
-    const arc = d3.arc<PieArcDatum<ChartType>>().innerRadius(0).outerRadius(radius)
-    const arcGenerator = d3.arc<PieArcDatum<ChartType>>().innerRadius(innerRadius).outerRadius(outerRadius);
 
-    // Define colors for graphing 
-    // const colors = d3.scaleOrdinal(['#ffa822', '#134e6f', '#ff6150', '#1ac0c6', '#dee0e6'])
+    // Define arcs for graphing 
+    const pieArc = d3.arc<PieArcDatum<ChartType>>().innerRadius(innerRadius).outerRadius(outerRadius);
+
+    // Define colors for graph arcs 
     const colors = d3.interpolateSpectral;
-    // const colors = d3.scaleOrdinal()
-    //   .domain(d3.range(items.length) as unknown as string[])
-      // .range([(items) => items.label]);
-    //   .range( d3.quantize((t) => d3.interpolateGreens(t * 0.8 + 0.1), items.length)
-    //     .reverse() 
-    //   );
+
+    // Add tooltip
+    const tooldiv = d3.select('#doughnutContainer')
+      .append('div')
+      .attr('id', 'visibility')
+      .style('visibility', 'hidden')
+      .style('position', 'absolute')
+      .style('background-color', 'red')
 
     // Define the size and position of svg
     const svg = d3
@@ -60,49 +59,30 @@ const DoughnutChart = ({ items }: { items: ChartType[] }) => {
       .attr("preserveAspectRatio", "xMidYMid meet")
       .append('g')
       .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
+      
+    // generate arcs
+    const arcs = svg.selectAll()
+      .data(piedata)
+      .enter();
 
-    // const svg = d3
-    // .select(element)
-    // .append("svg")
-    // .attr("preserveAspectRatio", "xMidYMid meet")
-    // .attr("height", "100%")
-    // .attr("width",  "100%")
-    // .attr("viewBox", `0 0 ${boxSize} ${boxSize}`)
-    // .append("g")
-    // .attr("transform", `translate(${boxSize / 2}, ${boxSize / 2})`);
-  
-    //add first line of text in middle  of doughnut
-    // svg.append("text")
-    //   .attr("dy", ".35em")
-    //   .attr("text-anchor", "middle")
-    //   .attr("style","font-family")
-    //   .attr("font-size","20")
-    //   .attr("fill","#000000")
-    //   .attr("dy", "0em")
-    //   .text("60% ");
-
-    //add second line of text in middle of doughnut
-    svg.append("text")
-      .attr("dy", ".35em")
-      .attr("text-anchor", "middle")
-      .attr("style","font-family")
-      .attr("font-size","20")
-      .attr("fill","#000000")
-      .attr("dy", "1em") // how far apart it shows up
-      // .text("complete");
-
-
-  
-    const arcs = svg.selectAll().data(pieGenerator).enter();
     arcs
       .append("path")
-      .attr("d", arcGenerator)
-      // .style("fill", (d, i) => colors(d.data.label) as string);
-      .style("fill", (d:any, i:number) => { 
-        // const t:number = i / data.columns.length;
+      .attr("d", pieArc)
+      .attr("fill", (d:any, i:number) => { 
         const t:number = i / items.length;
-        console.log(colors(t), items.length)
         return colors(t) as string; 
+      })
+      .attr('stroke', 'white')
+      .on('mouseover', (e, d) => {
+        tooldiv.style('visibility', 'visible')
+          .text(`${d.data.label}: ${d.data.value}`)
+      })
+      .on('mousemove', (e, d) => {
+        tooldiv.style('top', (e.pageY - 50) + 'px')
+          .style('left', (e.pageX - 50) + 'px')
+      })
+      .on('mouseout', () => {
+        tooldiv.style('visibility', 'hidden')
       });
 
     //add label inside doughnut chart
@@ -113,39 +93,9 @@ const DoughnutChart = ({ items }: { items: ChartType[] }) => {
       .style("fill","#000000")
       .style("font-size","30px")
       .attr("transform", (d) => {
-        const[x,y] = arcGenerator.centroid(d);
+        const[x,y] = pieArc.centroid(d);
         return `translate(${x}, ${y})`;
       });
-
-    // Add tooltip
-    // const tooldiv = d3.select('#doughnutContainer')
-    //   .append('div')
-    //   .attr('id', 'visibility')
-    //   .style('visibility', 'hidden')
-    //   .style('position', 'absolute')
-    //   .style('background-color', 'red')
-
-    // Draw pie
-    // svg.append('g')
-    //   .selectAll('path')
-    //   .data(piedata)
-    //   .join('path')
-    //   .attr('d', arc)
-    //   .attr('fill', (d) => {
-    //     return colors(d.data.label) as string
-    //   })
-    //   .attr('stroke', 'white')
-    //   .on('mouseover', (e, d) => {
-    //     tooldiv.style('visibility', 'visible')
-    //       .text(`${d.data.label}: ${d.data.value}`)
-    //   })
-    //   .on('mousemove', (e, d) => {
-    //     tooldiv.style('top', (e.pageY - 50) + 'px')
-    //       .style('left', (e.pageX - 50) + 'px')
-    //   })
-    //   .on('mouseout', () => {
-    //     tooldiv.style('visibility', 'hidden')
-    //   })
 
     // Add title
     // const title = d3.select('#doughnutContainer')
