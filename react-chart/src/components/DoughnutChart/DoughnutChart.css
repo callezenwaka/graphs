@@ -1,0 +1,11 @@
+.doughnut--section {
+  margin-top: 3rem;
+}
+.doughnut--wrapper {
+  width: 100%;
+}
+@media only screen and (min-width: 960px) {
+  .doughnut--wrapper {
+    width: calc(100% / 3);
+  }
+}

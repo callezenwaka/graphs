@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, BarChart, LineChart, PieChart } from "./components/index";
+import { Header, BarChart, LineChart, PieChart, DoughnutChart } from "./components/index";
 // import logo from './logo.svg';
 import './App.css';
 
@@ -24,6 +24,7 @@ function App() {
         <PieChart items={ data } />
         <LineChart items={ data } />
         <BarChart items={ data } />
+        <DoughnutChart items={ data } />
       </section>
     </div>
   );
